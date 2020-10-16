@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drum-Kit</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="keys">
+      <div data-key="65" class="key">
+        <kbd>A</kbd> <br>
+        <span class="sound">clap</span>
+      </div>
+      <div data-key="83" class="key">
+        <kbd>S</kbd> <br>
+        <span class="sound">hithat</span>
+      </div>
+      <div data-key="68" class="key">
+        <kbd>D</kbd> <br>
+        <span class="sound">kick</span>
+      </div>
+      <div data-key="70" class="key">
+        <kbd>F</kbd> <br>
+        <span class="sound">openhat</span>
+      </div>
+      <div data-key="71" class="key">
+        <kbd>G</kbd> <br>
+        <span class="sound">boom</span>
+      </div>
+      <div data-key="72" class="key">
+        <kbd>H</kbd> <br>
+        <span class="sound">ride</span>
+      </div>
+      <div data-key="74" class="key">
+        <kbd>J</kbd> <br>
+        <span class="sound">snare</span>
+      </div>
+      <div data-key="75" class="key">
+        <kbd>K</kbd> <br>
+        <span class="sound">tom</span>
+      </div>
+      <div data-key="76" class="key">
+        <kbd>L</kbd> <br>
+        <span class="sound">tink</span>
+      </div>
+    </div>
+
+    <audio data-key="65" src="Sounds/clap.wav"></audio>
+    <audio data-key="83" src="Sounds/hihat.wav"></audio>
+    <audio data-key="68" src="Sounds/kick.wav"></audio>
+    <audio data-key="70" src="Sounds/openhat.wav"></audio>
+    <audio data-key="71" src="Sounds/boom.wav"></audio>
+    <audio data-key="72" src="Sounds/ride.wav"></audio>
+    <audio data-key="74" src="Sounds/snare.wav"></audio>
+    <audio data-key="75" src="Sounds/tom.wav"></audio>
+    <audio data-key="76" src="Sounds/tink.wav"></audio>
+
+    <script>
+      function removeTransition(e) {
+        if (e.propertyName !== 'transform') return;//listens for the biggest event ie transform and not other small events
+        e.target.classList.remove('playing');
+      }//to remove class playing from the element after transition is done
+    
+      function playSound(e) {
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);//gets specific audio element if audio present at particular keycode
+        const key = document.querySelector(`div[data-key="${e.keyCode}"]`);//selects div or the data-key of pressed key(to put animation)
+        if (!audio) return;//if no audio at a particular keypress. Stops func from running
+    
+        key.classList.add('playing');
+        audio.currentTime = 0;//rewinds to start if hitted again and again at once
+        audio.play();//play audio if present
+      }
+    
+      const keys = Array.from(document.querySelectorAll('.key'));//forms a list of all data-key elements
+      keys.forEach(key => key.addEventListener('transitionend'/*after transition ends (after .07 sec in this case)*/, removeTransition));
+      window.addEventListener('keydown'/*event listened*/, playSound/*func called when event takes place*/);//loops over every element of the list
+    </script>
+    
+  </body>
+</html>
